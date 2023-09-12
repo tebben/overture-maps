@@ -1,0 +1,8 @@
+duckdb-engine 
+jupysql 
+pandas===2.0.3
+geopandas 
+numpy 
+jupyter 
+notebook
+keplergl

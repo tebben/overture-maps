@@ -1,0 +1,21 @@
+{
+  "name": "overture-pmtiles",
+  "version": "3.3.1",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "Yasunori Kirimoto",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
+  },
+  "dependencies": {
+    "maplibre-gl": "^3.3.1",
+    "pmtiles": "^2.10.0"
+  }
+}
