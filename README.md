@@ -1,10 +1,10 @@
 # overture-maps
 
-Playing around with Overture Maps data. A notebook to play around in and some scripts to extract and convert data to geoparquet, geojson, pmtiles.
+Playing around with data from Overture Maps. A notebook to play around in and some scripts to extract and convert data to geoparquet, geojson and pmtiles.
 
 ## Download overture-maps data
 
-Run scripts/download_overture_data.sh to download all overture parquet files from AWS without needing to login. This will take some time to run since this is around 200GB. This script will install AWD cli if not found on the system. Using duckdb we could also directly request the data we need because the data is hive partitioned but I prefer to have everything locally.
+Run `scripts/download_overture_data.sh` to download all overture parquet files from AWS without needing to login. This will take some time to run since this is around 200GB. This script will install AWS cli if not found on the system. Using duckdb we could also directly request the data we need because the data is hive partitioned but I prefer to have everything locally.
 
 ```sh
 ./scripts/download_overture_data.sh
@@ -39,12 +39,13 @@ Open ./notebooks/hello_overture.ipynb and select kernel overture from our conda 
 
 ## Extract data, convert to geoparquet and create PMTiles
 
-Make sure DuckDB, gpq and pmtiles are installed
+Make sure DuckDB, gpq, tippecanoe and pmtiles are installed
 
 ```sh
 sudo ./scripts/install_duckdb.sh
 sudo ./scripts/install_gpq.sh
 sudo ./scripts/install_pmtiles.sh
+sudo ./scripts/install_tippecanoe.sh
 ```
 
 ### Create bounds

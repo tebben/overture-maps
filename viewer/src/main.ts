@@ -9,6 +9,7 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 
 const map = new maplibregl.Map({
     container: 'map',
+    hash: true,
     style: {
         version: 8,
         glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -20,7 +21,7 @@ const map = new maplibregl.Map({
         },
         layers: [
             {
-                "id": 'admins-fill',
+                "id": 'admins',
                 "type": 'fill',
                 "source": 'overture',
                 "source-layer": 'admins',
@@ -39,7 +40,7 @@ const map = new maplibregl.Map({
                 }
             },
             {
-                "id": 'buldings-polygon',
+                "id": 'buldings',
                 "type": 'fill',
                 "source": 'overture',
                 "source-layer": 'buildings',
@@ -58,20 +59,20 @@ const map = new maplibregl.Map({
                   }
               }, */
             {
-                "id": 'roads-line',
+                "id": 'roads',
                 "type": 'line',
                 "source": 'overture',
                 "source-layer": 'roads',
-                'filter': [
-                    ">=", ["zoom"],
-                    ["match", ["get", "class"],
-                        ["motorway", "primary", "secondary"],
-                        10,
-                        ["tertiary", "residential"],
-                        13,
-                        14
-                    ]
-                ],
+                /*  'filter': [
+                     ">=", ["zoom"],
+                     ["match", ["get", "class"],
+                         ["motorway", "primary", "secondary"],
+                         10,
+                         ["tertiary", "residential"],
+                         13,
+                         14
+                     ]
+                 ], */
                 "paint": {
                     'line-color':
                         ['case',
@@ -113,6 +114,10 @@ const map = new maplibregl.Map({
                             ['==', ['get', 'class'], 'unknown'], 2,
                             2
                         ],
+
+                },
+                "layout": {
+                    "line-cap": "round"
                 }
             },
             {
@@ -135,7 +140,7 @@ const map = new maplibregl.Map({
                 }
             },
             {
-                "id": 'places-points',
+                "id": 'places',
                 "type": 'circle',
                 "source": 'overture',
                 "source-layer": 'places',
@@ -148,6 +153,33 @@ const map = new maplibregl.Map({
     },
     center: [5.300171258675078, 51.69073045148227],
     zoom: 14,
+});
+
+map.on('click', function (e) {
+    var visibleLayers = map.getStyle().layers;
+
+    for (var i = 0; i < visibleLayers.length; i++) {
+        var layerId = visibleLayers[i].id;
+        var features = map.queryRenderedFeatures(e.point, { layers: [layerId] });
+
+        if (features.length) {
+            var feature = features[0];
+
+            // Create an HTML table to display key-value pairs from feature properties
+            var tableHTML = '<h1>' + layerId + '</h1><table>';
+            for (var property in feature.properties) {
+                if (feature.properties.hasOwnProperty(property)) {
+                    tableHTML += '<tr><td>' + property + '</td><td>' + feature.properties[property] + '</td></tr>';
+                }
+            }
+            tableHTML += '</table>';
+
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(tableHTML)
+                .addTo(map);
+        }
+    }
 });
 
 map.addControl(

@@ -1,11 +1,43 @@
 html,
 body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 #map {
-  z-index: 0;
-  height: 100%;
+    z-index: 0;
+    height: 100%;
+}
+
+#info {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    max-width: 22rem;
+    border-radius: 0.25rem;
+    background-color: #353535;
+    color: #e2e2e2;
+    padding: 0.75rem;
+    z-index: 1;
+}
+
+#info .header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2rem;
+}
+
+#info .description {
+    font-size: 0.85rem;
+}
+
+.maplibregl-popup-content h1 {
+    font-size: 1rem;
+    line-height: 0.1rem;
+}
+
+.maplibregl-popup-content td {
+    padding-right: 1.25rem;
 }
