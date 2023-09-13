@@ -50,15 +50,14 @@ tile-join -pk -o $OUTPUT_PATH/overture.mbtiles $OUTPUT_PATH/admins.mbtiles $OUTP
 # tippecanoe outputs pmtiles V2, we want v3
 echo "convert mbtiles to pmtiles"
 pmtiles convert $OUTPUT_PATH/overture.mbtiles $OUTPUT_PATH/overture.pmtiles
-#pmtiles convert $OUTPUT_PATH/overture.mbtiles $OUTPUT_PATH/overture.pmtiles
 
 echo "Cleaning up intermediate files"
 # remove mbtiles file
-#rm $OUTPUT_PATH/admins.mbtiles
-#rm $OUTPUT_PATH/buildings.mbtiles
-#rm $OUTPUT_PATH/roads.mbtiles
+rm $OUTPUT_PATH/admins.mbtiles
+rm $OUTPUT_PATH/buildings.mbtiles
+rm $OUTPUT_PATH/roads.mbtiles
 rm $OUTPUT_PATH/overture.mbtiles
-#rm $OUTPUT_PATH/places.mbtiles
+rm $OUTPUT_PATH/places.mbtiles
 
 # copy pmtiles to the viewer
 cp $OUTPUT_PATH/overture.pmtiles ./viewer/dist/overture.pmtiles

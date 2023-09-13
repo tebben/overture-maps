@@ -7,6 +7,9 @@ import * as pmtiles from 'pmtiles'
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
+let hostname = location.hostname;
+console.log(hostname);
+
 const map = new maplibregl.Map({
     container: 'map',
     hash: true,
@@ -16,7 +19,8 @@ const map = new maplibregl.Map({
         sources: {
             "overture": {
                 "type": "vector",
-                "url": "pmtiles://dist/overture.pmtiles",
+                "url": location.hostname.includes("github.io") ? "pmtiles://https://storage.googleapis.com/ahp-research/overture/pmtiles/overture.pmtiles" : "pmtiles://dist/overture.pmtiles",
+                "attribution": "© OpenStreetMap, Overture Maps Foundation, Barry"
             }
         },
         layers: [
@@ -39,40 +43,36 @@ const map = new maplibregl.Map({
                     'line-width': 1
                 }
             },
-            {
+            /* {
                 "id": 'buldings',
                 "type": 'fill',
                 "source": 'overture',
                 "source-layer": 'buildings',
                 "paint": {
-                    'fill-color': '#353535'
+                    'fill-color': '#1C1C1C'
+                }
+            }, */
+            {
+                "id": 'buldings-extruded',
+                "type": 'fill-extrusion',
+                "source": 'overture',
+                "source-layer": 'buildings',
+                "paint": {
+                    'fill-extrusion-color': '#1C1C1C',
+                    "fill-extrusion-height": [
+                        "case",
+                        ["==", ["get", "height"], -1],
+                        0,
+                        ["get", "height"]  // Otherwise, use the actual height value
+                    ],
+                    'fill-extrusion-opacity': 0.9
                 }
             },
-            /*   {
-                  "id": 'buldings-extruded',
-                  "type": 'fill-extrusion',
-                  "source": 'overture',
-                  "source-layer": 'buildings',
-                  "paint": {
-                      'fill-extrusion-color': '#353535',
-                      'fill-extrusion-height': ['get', 'height'],
-                  }
-              }, */
             {
                 "id": 'roads',
                 "type": 'line',
                 "source": 'overture',
                 "source-layer": 'roads',
-                /*  'filter': [
-                     ">=", ["zoom"],
-                     ["match", ["get", "class"],
-                         ["motorway", "primary", "secondary"],
-                         10,
-                         ["tertiary", "residential"],
-                         13,
-                         14
-                     ]
-                 ], */
                 "paint": {
                     'line-color':
                         ['case',
@@ -80,18 +80,18 @@ const map = new maplibregl.Map({
                             ['==', ['get', 'class'], 'primary'], '#717171',
                             ['==', ['get', 'class'], 'secondary'], '#717171',
                             ['==', ['get', 'class'], 'tertiary'], '#717171',
-                            ['==', ['get', 'class'], 'residential'], '#717171',
-                            ['==', ['get', 'class'], 'livingStreet'], '#717171',
+                            ['==', ['get', 'class'], 'residential'], '#464646',
+                            ['==', ['get', 'class'], 'livingStreet'], '#464646',
                             ['==', ['get', 'class'], 'trunk'], '#5A5A5A',
                             ['==', ['get', 'class'], 'unclassified'], '#5A5A5A',
-                            ['==', ['get', 'class'], 'parkingAisle'], '#5A5A5A',
-                            ['==', ['get', 'class'], 'driveway'], '#5A5A5A',
-                            ['==', ['get', 'class'], 'pedestrian'], '#5A5A5A',
-                            ['==', ['get', 'class'], 'footway'], '#6a6a6a',
-                            ['==', ['get', 'class'], 'steps'], '#6a6a6a',
-                            ['==', ['get', 'class'], 'track'], '#6a6a6a',
-                            ['==', ['get', 'class'], 'cycleway'], '#6a6a6a',
-                            ['==', ['get', 'class'], 'unknown'], '#6a6a6a',
+                            ['==', ['get', 'class'], 'parkingAisle'], '#323232',
+                            ['==', ['get', 'class'], 'driveway'], '#1C1C1C',
+                            ['==', ['get', 'class'], 'pedestrian'], '#232323',
+                            ['==', ['get', 'class'], 'footway'], '#1C1C1C',
+                            ['==', ['get', 'class'], 'steps'], '#1C1C1C',
+                            ['==', ['get', 'class'], 'track'], '#1C1C1C',
+                            ['==', ['get', 'class'], 'cycleway'], '#1C1C1C',
+                            ['==', ['get', 'class'], 'unknown'], '#1C1C1C',
                             '#5A5A5A'
                         ],
                     'line-width':
@@ -106,22 +106,21 @@ const map = new maplibregl.Map({
                             ['==', ['get', 'class'], 'unclassified'], 2,
                             ['==', ['get', 'class'], 'parkingAisle'], 2,
                             ['==', ['get', 'class'], 'driveway'], 2,
-                            ['==', ['get', 'class'], 'pedestrian'], 2,
-                            ['==', ['get', 'class'], 'footway'], 2,
+                            ['==', ['get', 'class'], 'pedestrian'], 3,
+                            ['==', ['get', 'class'], 'footway'], 3,
                             ['==', ['get', 'class'], 'steps'], 2,
                             ['==', ['get', 'class'], 'track'], 2,
                             ['==', ['get', 'class'], 'cycleway'], 2,
                             ['==', ['get', 'class'], 'unknown'], 2,
                             2
                         ],
-
                 },
                 "layout": {
                     "line-cap": "round"
                 }
             },
             {
-                "id": 'road-names',
+                "id": 'roads-labels',
                 "type": 'symbol',
                 "source": 'overture',
                 "source-layer": 'roads',
@@ -144,14 +143,38 @@ const map = new maplibregl.Map({
                 "type": 'circle',
                 "source": 'overture',
                 "source-layer": 'places',
+
                 "paint": {
-                    "circle-color": "#fff",
-                    "circle-radius": 10
+                    "circle-color": "#4EDAD8",
+                    "circle-radius": 5,
+                    "circle-blur": 0.3,
+                    "circle-opacity": 0.8
+                }
+            },
+            {
+                "id": 'places-labels',
+                "type": 'symbol',
+                "source": 'overture',
+                "source-layer": 'places',
+                "layout": {
+                    'icon-allow-overlap': false,
+                    'text-allow-overlap': false,
+                    'text-anchor': "bottom",
+                    'text-radial-offset': 1,
+                    'symbol-placement': "point",
+                    'text-field': ['get', 'name'],
+                    'text-size': 10,
+                },
+                "paint": {
+                    'text-color': "#4EDAD8",
+                    'text-halo-color': "black",
+                    'text-halo-width': 3,
+                    'text-halo-blur': 2
                 }
             },
         ],
     },
-    center: [5.300171258675078, 51.69073045148227],
+    center: [4.91431, 52.34304],
     zoom: 14,
 });
 
@@ -182,8 +205,8 @@ map.on('click', function (e) {
     }
 });
 
-map.addControl(
+/* map.addControl(
     new maplibregl.NavigationControl({
         visualizePitch: true,
     })
-);
+); */

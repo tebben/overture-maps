@@ -1,10 +1,19 @@
 # overture-maps
 
-Playing around with data from Overture Maps. A notebook to play around in and some scripts to extract and convert data to geoparquet, geojson and pmtiles.
+Playing around with data from OvertureMaps.
+
+-   Download OvertureMaps data
+-   Extract data from OvertureMaps for a country and convert to geoparquet
+-   Create PMTiles from extracted data
+-   Notebook with some queries and a map to display some data
+
+Demo viewer for generated PMTiles: [https://tebben.github.io/overture-maps/](https://tebben.github.io/overture-maps/)
+
+![PMTiles](./data/images/pmtiles.jpg)
 
 ## Download overture-maps data
 
-Run `scripts/download_overture_data.sh` to download all overture parquet files from AWS without needing to login. This will take some time to run since this is around 200GB. This script will install AWS cli if not found on the system. Using duckdb we could also directly request the data we need because the data is hive partitioned but I prefer to have everything locally.
+For the notebook and scripts to create extracts, geoparquet and PMTiles we need all the data locally. Run `scripts/download_overture_data.sh` to download all overture parquet files from AWS without needing to login. This will take some time to run since this is around 200GB. This script will install AWS cli if not found on the system.
 
 ```sh
 ./scripts/download_overture_data.sh
@@ -27,7 +36,7 @@ Install miniconda if not installed yet.
 Create a conda environment and install some dependencies.
 
 ```sh
-conda create -n overture python=3.10 
+conda create -n overture python=3.10
 conda activate overture
 conda install pip
 pip install -r requirements.txt
@@ -66,7 +75,7 @@ The following script will create geoparquet files for all overture-maps themes w
 
 ### Create GeoJSON
 
-For the PMTiles creation we need GeoJSON files `parquet_to_geojson.sh` creates geojson files for each theme from our geoparquet files which can be feeded into tippecanoe. Not every field is added to the GeoJSON features, if you miss something you can update the queries.
+For the PMTiles creation we need GeoJSON files, the script `parquet_to_geojson.sh` creates geojson files for each theme from our geoparquet files which than can feeded into tippecanoe. Not every field is added to the GeoJSON feature properties at the moment.
 
 ```sh
 ./scripts/convert/parquet_to_geojson.sh
@@ -74,13 +83,13 @@ For the PMTiles creation we need GeoJSON files `parquet_to_geojson.sh` creates g
 
 ### Create PMTiles
 
-When we have the GeoJSON files we can create our PMTiles using tippecanoe.
+When we have the GeoJSON files we can create our PMTiles using tippecanoe and pmtiles.
 
 ```sh
 ./scripts/convert/geojson_to_pmtiles.sh
 ```
 
-This will create mbtiles for each theme, merge them and convert to PMTiles. Directly creating pmtiles with tippecanoe resulted in a PMTiles V2 files which could not be converted to v3, therefore mbtiles are created and later converted into PMTiles using `pmtiles convert`
+This will create mbtiles for each theme, merge them and convert to PMTiles. Directly creating pmtiles with tippecanoe resulted in a PMTiles V2 file which could not be converted to v3, therefore mbtiles are created and later converted into PMTiles using `pmtiles convert`
 
 ### Run viewer to view PMTiles
 

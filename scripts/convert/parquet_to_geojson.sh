@@ -63,7 +63,7 @@ duckdb -c """
             COALESCE(height, -1) as height,
             COALESCE(numFloors, -1) as numFloors,
             COALESCE(class, '') as class,
-            COALESCE(replace(json_extract(names::json,'\$.common[0].value'),'\"','')::varchar, '') as name,
+            COALESCE(replace(json_extract(names::json,'\$.key_value[0].value.list[0].key_value[0].value'),'\"','')::varchar, '') as name,
             ST_GeomFromWkb(geometry) AS geometry
         FROM read_parquet('$INPUT_PATH/buildings_geo.parquet')
     ) 
@@ -79,13 +79,9 @@ duckdb -c """
     LOAD spatial; 
     COPY (
         SELECT
-            COALESCE(replace(json_extract(addresses::json,'\$[0].locality'),'\"','')::varchar, '') as locality,
-            COALESCE(replace(json_extract(addresses::json,'\$[0].region'),'\"','')::varchar, '') as region,
-            COALESCE(replace(json_extract(addresses::json,'\$[0].postcode'),'\"','')::varchar, '') as postcode,
-            COALESCE(replace(json_extract(addresses::json,'\$[0].freeform'),'\"','')::varchar, '') as freeform,
             COALESCE(replace(json_extract(categories::json,'\$.main'),'\"','')::varchar, '') as category,
-            COALESCE(replace(json_extract(names::json,'\$.common[0].value'),'\"','')::varchar, '') as name,
-            COALESCE(confidence, 0),
+            COALESCE(replace(json_extract(names::json,'\$.key_value[0].value.list[0].key_value[0].value'), '\"', '')::varchar, '') as name,
+            COALESCE(confidence, 0) as confidence,
             ST_GeomFromWkb(geometry) AS geometry
         FROM read_parquet('$INPUT_PATH/places_geo.parquet')
     ) 
