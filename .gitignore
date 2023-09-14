@@ -1,4 +1,5 @@
 /data/overture_maps/*
+/data/daylight/*
 /data/output/geojson/*
 /data/output/geoparquet/*
 /data/output/pmtiles/*
@@ -14,6 +15,7 @@ lerna-debug.log*
 
 viewer/node_modules
 viewer/dist/overture.pmtiles
+viewer/dist/daylight.pmtiles
 viewer/dist-ssr
 *.local
 

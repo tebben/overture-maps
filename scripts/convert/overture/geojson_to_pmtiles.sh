@@ -12,13 +12,19 @@ OUTPUT_PATH="./data/output/pmtiles"
 ## ADMINS
 #############################
 echo "Generating admins.mbtiles"
-tippecanoe -zg -z20 --projection=EPSG:4326 -o $OUTPUT_PATH/admins.mbtiles -l admins --drop-densest-as-needed $INPUT_PATH/admins.geojson --force
+tippecanoe -Z0 -z16 --projection=EPSG:4326 -o $OUTPUT_PATH/admins.mbtiles -l admins \
+    --detect-shared-borders \
+    --drop-smallest-as-needed \
+    $INPUT_PATH/admins.geojson --force
 
 #############################
 ## BUILDINGS
 #############################
 echo "Generating buildings.mbtiles"
-tippecanoe -Z13 -z20 --projection=EPSG:4326 -o $OUTPUT_PATH/buildings.mbtiles -l buildings --drop-densest-as-needed $INPUT_PATH/buildings.geojson --force
+tippecanoe -Z13 -z16 --projection=EPSG:4326 -o $OUTPUT_PATH/buildings.mbtiles -l buildings \
+    --detect-shared-borders \
+    --drop-smallest-as-needed \
+    $INPUT_PATH/buildings.geojson --force
 
 #############################
 ## ROADS
@@ -33,13 +39,16 @@ tippecanoe -Z13 -z20 --projection=EPSG:4326 -o $OUTPUT_PATH/buildings.mbtiles -l
 # 3) [ ">=", "$zoom", 15]]
 #    If zoom is greater than or equals to 15 return true = render everything after and at zoom 15
 echo "Generating roads.mbtiles"
-tippecanoe -Z5 -z20 -o $OUTPUT_PATH/roads.mbtiles --coalesce-smallest-as-needed -j '{ "*": [ "any", [ "in", "class", "motorway" ], [ "all", [ ">=", "$zoom", 9 ], [ "in", "class", "primary", "secondary" ]],  [ "all", [ ">=", "$zoom", 11 ], [ "in", "class", "tertiary", "residential", "livingStreet" ]], [ ">=", "$zoom", 12]] }' -l roads $INPUT_PATH/roads.geojson --force
+tippecanoe -Z5 -z16 -o $OUTPUT_PATH/roads.mbtiles -l roads \
+    --detect-shared-borders \
+    --drop-smallest-as-needed \
+    --coalesce-smallest-as-needed -j '{ "*": [ "any", [ "in", "class", "motorway" ], [ "all", [ ">=", "$zoom", 9 ], [ "in", "class", "primary", "secondary" ]],  [ "all", [ ">=", "$zoom", 11 ], [ "in", "class", "tertiary", "residential", "livingStreet" ]], [ ">=", "$zoom", 12]] }' -l roads $INPUT_PATH/roads.geojson --force
 
 #############################
 ## PLACES
 #############################
 echo "Generating places.mbtiles"
-tippecanoe -Z14 -z20 --projection=EPSG:4326 -o $OUTPUT_PATH/places.mbtiles -l places $INPUT_PATH/places.geojson --force
+tippecanoe -Z14 -z16 -B16 --projection=EPSG:4326 -o $OUTPUT_PATH/places.mbtiles -l places $INPUT_PATH/places.geojson --force
 
 
 # join all mbtiles into 1 big file

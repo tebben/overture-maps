@@ -3,7 +3,7 @@ body {
     height: 100%;
     padding: 0;
     margin: 0;
-    background-color: black;
+    background-color: #292929;
     font-family: Arial, sans-serif;
 }
 
@@ -14,24 +14,74 @@ body {
 
 #info {
     position: absolute;
-    bottom: 1rem;
+    top: 1rem;
     left: 1rem;
     color: #d3d3d3;
     z-index: 1;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    -webkit-backdrop-filter: blur(8px); /* Safari 9+ */
+    backdrop-filter: blur(6px); /* Chrome and Opera */
+    box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.1);
 }
 
 #info .header {
     font-size: 2.25rem;
     font-weight: 600;
-    line-height: 3rem;
+    line-height: 2rem;
+    color: #bdbdbd;
+    text-shadow: 2px 4px 1px #373737;
 }
 
 #info .description {
-    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    color: #bdbdbd;
+    font-family: "Courier New", Courier, monospace;
 }
 
 #info a {
     color: inherit;
+}
+
+.controls {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.slider {
+    -webkit-appearance: none; /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 15px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+    transition: opacity 0.2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 13px; /* Slider handle height */
+    background: #4bbbba; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    background: #04aa6d; /* Green background */
+    cursor: pointer; /* Cursor on hover */
 }
 
 .maplibregl-popup-content h1 {

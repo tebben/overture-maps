@@ -2,8 +2,8 @@
 
 Playing around with data from OvertureMaps.
 
--   Download OvertureMaps data
--   Extract data from OvertureMaps for a country and convert to geoparquet
+-   Download OvertureMaps and Daylight data
+-   Extract data from OvertureMaps and Daylight for a country and convert to geoparquet
 -   Create PMTiles from extracted data
 -   Notebook with some queries and a map to display some data
 
@@ -70,7 +70,7 @@ In our test we don't want to do the whole world so we create some bounds, in thi
 The following script will create geoparquet files for all overture-maps themes with only data inside our given bounds, for pmtiles we don't need geoparquet but it's nice to have anyways. This can take some time, no fancy things are done such as spatial partitioning/indexing.
 
 ```sh
-./scripts/convert/to_geoparquet.sh
+./scripts/convert/overture/to_geoparquet.sh
 ```
 
 ### Create GeoJSON
@@ -78,7 +78,7 @@ The following script will create geoparquet files for all overture-maps themes w
 For the PMTiles creation we need GeoJSON files, the script `parquet_to_geojson.sh` creates geojson files for each theme from our geoparquet files which than can feeded into tippecanoe. Not every field is added to the GeoJSON feature properties at the moment.
 
 ```sh
-./scripts/convert/parquet_to_geojson.sh
+./scripts/convert/overture/parquet_to_geojson.sh
 ```
 
 ### Create PMTiles
@@ -86,7 +86,7 @@ For the PMTiles creation we need GeoJSON files, the script `parquet_to_geojson.s
 When we have the GeoJSON files we can create our PMTiles using tippecanoe and pmtiles.
 
 ```sh
-./scripts/convert/geojson_to_pmtiles.sh
+./scripts/convert/overture/geojson_to_pmtiles.sh
 ```
 
 This will create mbtiles for each theme, merge them and convert to PMTiles. Directly creating pmtiles with tippecanoe resulted in a PMTiles V2 file which could not be converted to v3, therefore mbtiles are created and later converted into PMTiles using `pmtiles convert`
