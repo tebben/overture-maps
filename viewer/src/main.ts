@@ -536,7 +536,8 @@ slider.addEventListener("input", function () {
         return;
     }
 
-    const confidence = Math.round(parseInt(slider.value) / 100);
+    const confidence = parseInt(slider.value) / 100;
+    console.log(confidence);
     map.setFilter("places", [">=", ["get", "confidence"], confidence]);
     map.setFilter("places-labels", [">=", ["get", "confidence"], confidence]);
     confidenceValueElement.innerHTML = `${slider.value}%`;
