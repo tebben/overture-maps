@@ -7,15 +7,19 @@
         <title>OvertureMaps PMTiles</title>
     </head>
     <body>
-        <div id="info">
+        <div class="info">
             <div class="header">PMTiles</div>
             <div class="header">OvertureMaps</div>
             <div class="description">
-                <a href="https://github.com/tebben/overture-maps">with Daylight Earth Table data</a>
+                <a href="https://github.com/tebben/overture-maps">WITH DAYLIGHT EARTH DATA</a>
             </div>
 
             <div class="controls">
-                <div>POI Confidence</div>
+                <div class="label-value">
+                    <div class="label">Filter POI Confidence</div>
+                    <div class="value" id="confidence-value">90%</div>
+                </div>
+
                 <input
                     type="range"
                     min="1"

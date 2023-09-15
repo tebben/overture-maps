@@ -12,7 +12,7 @@ body {
     height: 100%;
 }
 
-#info {
+.info {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -25,29 +25,36 @@ body {
     box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.1);
 }
 
-#info .header {
-    font-size: 2.25rem;
+.info .header {
+    font-size: 2rem;
     font-weight: 600;
     line-height: 2rem;
     color: #bdbdbd;
     text-shadow: 2px 4px 1px #373737;
 }
 
-#info .description {
+.info .description {
     margin-top: 0.25rem;
-    font-size: 1rem;
+    font-size: 0.93rem;
     color: #bdbdbd;
     font-family: "Courier New", Courier, monospace;
 }
 
-#info a {
+.info a {
     color: inherit;
 }
 
 .controls {
-    margin-top: 2rem;
     font-size: 0.75rem;
     font-family: "Courier New", Courier, monospace;
+    margin-top: 1rem;
+}
+
+.label-value {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.75rem;
 }
 
 .slider {
@@ -91,4 +98,8 @@ body {
 
 .maplibregl-popup-content td {
     padding-right: 1.25rem;
+}
+
+.maplibregl-ctrl.maplibregl-ctrl-attrib {
+    background-color: transparent !important;
 }

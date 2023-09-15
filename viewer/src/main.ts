@@ -9,6 +9,7 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 const map = new maplibregl.Map({
     container: "map",
     hash: true,
+    maxPitch: 80,
     style: {
         version: 8,
         glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -117,22 +118,6 @@ const map = new maplibregl.Map({
                 "paint": {
                     "line-color": "#263138",
                     "line-width": 3
-                }
-            },
-            {
-                "id": "buldings-extruded",
-                "type": "fill-extrusion",
-                "source": "overture",
-                "source-layer": "buildings",
-                "paint": {
-                    "fill-extrusion-color": "#2B2B2B",
-                    "fill-extrusion-height": [
-                        "case",
-                        ["==", ["get", "height"], -1],
-                        0,
-                        ["get", "height"]
-                    ],
-                    "fill-extrusion-opacity": 1
                 }
             },
             {
@@ -355,6 +340,35 @@ const map = new maplibregl.Map({
                 }
             },
             {
+                "id": "buldings-extruded",
+                "type": "fill-extrusion",
+                "source": "overture",
+                "source-layer": "buildings",
+                "minzoom": 14,
+                "paint": {
+                    "fill-extrusion-color": "#222222",
+                    "fill-extrusion-vertical-gradient": true,
+                    "fill-extrusion-height": [
+                        "case",
+                        ["==", ["get", "height"], -1],
+                        0,
+                        ["get", "height"]
+                    ],
+                    "fill-extrusion-base": 0,
+                    "fill-extrusion-opacity": 1
+                }
+            },
+            {
+                "id": "buldings-lines",
+                "type": "line",
+                "source": "overture",
+                "source-layer": "buildings",
+                "minzoom": 16,
+                "paint": {
+                    "line-color": "#323232"
+                }
+            },
+            {
                 "id": "places",
                 "type": "circle",
                 "source": "overture",
@@ -513,10 +527,17 @@ map.on("click", function (e) {
 });
 
 var slider = document.querySelector("#confidence-slider");
+
 //@ts-ignore
 slider.addEventListener("input", function () {
-    //@ts-ignore
-    const confidence = slider.value / 100;
+    const confidenceValueElement = document.querySelector("#confidence-value");
+
+    if (!slider || !(slider instanceof HTMLInputElement) || !confidenceValueElement) {
+        return;
+    }
+
+    const confidence = Math.round(parseInt(slider.value) / 100);
     map.setFilter("places", [">=", ["get", "confidence"], confidence]);
     map.setFilter("places-labels", [">=", ["get", "confidence"], confidence]);
+    confidenceValueElement.innerHTML = `${slider.value}%`;
 });
