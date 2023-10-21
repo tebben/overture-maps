@@ -23,7 +23,7 @@ tippecanoe -Z6 -z12 --projection=EPSG:4326 -o $OUTPUT_PATH/water.mbtiles -l wate
 ## LAND
 #############################
 echo "Generating land.mbtiles"
-tippecanoe -Z4 -z12 --projection=EPSG:4326 -o $OUTPUT_PATH/land.mbtiles -l land \
+tippecanoe -Z9 -z12 --projection=EPSG:4326 -o $OUTPUT_PATH/land.mbtiles -l land \
     --detect-shared-borders \
     --drop-smallest-as-needed \
     -j '{ "*": [ "any", [ "in", "class", "glacier" ], [ "all", [ ">=", "$zoom", 5 ], [ "in", "class", "forest", "sand" ]], [ "all", [ ">=", "$zoom", 7 ], [ "in", "class", "reef", "wetland" ]], [ "all", [ ">=", "$zoom", 9 ], [ "in", "class", "grass", "scrub" ]], [ ">=", "$zoom", 12]] }' \

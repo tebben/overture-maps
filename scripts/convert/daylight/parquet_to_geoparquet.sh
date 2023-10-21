@@ -18,14 +18,15 @@ duckdb -c """
     LOAD spatial; 
     COPY (
         SELECT 
-            a.geometry_id,
             a.class,
             a.subclass,
             a.metadata,
             a.original_source_tags,
             a.names,
             a.quadkey,
-            ST_AsWKB(ST_GeomFromText(a.wkt)) as geometry,
+            --ST_AsWKB(ST_GeomFromText(a.wkt)) as geometry,
+            --clip and get only the inside of the country
+            ST_AsWKB(ST_Intersection(ST_GeomFromText(a.wkt), ST_GeomFromWkb(b.geometry))) as geometry,
             a.theme
         FROM read_parquet('$DAYLIGHT_DATA_PATH/theme=water/*', hive_partitioning=1) AS a, read_parquet('$COUNTRY_BOUNDS_FILE') AS b
         WHERE ST_Intersects(ST_GeomFromText(a.wkt), ST_GeomFromWkb(b.geometry))
